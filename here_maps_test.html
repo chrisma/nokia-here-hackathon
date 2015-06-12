@@ -69,7 +69,7 @@ moveMapToX(map);
   <!-- Retrieve incidents -->
   <script  type="text/javascript" charset="UTF-8" >
   function get_incidents() {
-    var url = 'http://traffic.api.here.com/traffic/6.1/incidents.json?app_id=YtZv9akmf0nJuS8BmkVE&app_code=Rzpgz5s7hcxkNR-eWgvTAw&prox=52.53052,13.38285,10000&c=en&lg=en&i18n=false&localtime=true'
+    var url = 'http://traffic.cit.api.here.com/traffic/6.0/incidents.json?app_id=YtZv9akmf0nJuS8BmkVE&app_code=Rzpgz5s7hcxkNR-eWgvTAw&prox=52.53052,13.38285,10000&c=en&lg=en&i18n=false&localtime=true&jsoncallback=?'
     $.getJSON( url, function( data ) {
       console.log(data);
     } );
