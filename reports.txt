@@ -1,2 +1,6 @@
 The JSONP callback parameter 'jsoncallback' for http://traffic.cit.api.here.com/traffic/6.0/incidents.json is not documented
 
+https://developer.here.com/javascript-apis/documentation/v3/maps/topics/overview.html
+data (mapsjs-data.js) 	core 	This module provides set of classes for display of KML and GeoJSON data.
+It was not obvious to include this js when using heatmaps, since I do not use neighter KML nor GeoJSON data.
+

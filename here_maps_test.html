@@ -11,9 +11,10 @@
   <script type="text/javascript" charset="UTF-8"
     src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
   <script type="text/javascript" charset="UTF-8"
-    src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+    src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script><script type="text/javascript" charset="UTF-8"
+    src="https://js.api.here.com/v3/3.0/mapsjs-data.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-
+  
 </head>
 <body>
   <div id="map" style="width: 100%; height: 400px; background: grey"></div>
@@ -36,7 +37,34 @@ function moveMapToX(map)
     map.setZoom(8);
 }
 
+function create_color_gradient(start, mid, end)
+{
+  return {'0': start, '0.5': mid, '1': end};
+}
 
+function create_opacity(value)
+{
+  return {'opacity':value};
+}
+
+function create_heatmap(map, gradient, opacity, data)
+{
+  // Create heat map provider
+  var heatmapProvider = new H.data.heatmap.Provider({
+    colors: new H.data.heatmap.Colors(gradient, true),
+    // paint assumed values in regions where no data is available
+    assumeValues: true
+  });
+
+  // Add the data
+  heatmapProvider.addData(data);
+
+  // Create semi transparent heat map layer
+  var heatmapLayer = new H.map.layer.TileLayer(heatmapProvider, opacity);
+
+  // Add layer to the map
+  map.addLayer(heatmapLayer);
+}
 
 /**
  * Boilerplate map initialization code starts below:
@@ -65,6 +93,22 @@ var ui = H.ui.UI.createDefault(map, defaultLayers);
 
 // Now use the map as required...
 moveMapToX(map);
+
+var data = [
+  {lat: 53.1380, lng: 173.0219, value: 6.1},
+  {lat: 52.0415, lng: -171.8583, value: 5.8},
+  {lat: 53.3657, lng: -169.9851, value: 5.4},
+  {lat: 51.2915, lng: -169.5266, value: 4.6},
+  {lat: 51.5722, lng: -176.4482, value: 4.4},
+  {lat: 51.8108, lng: -171.5867, value: 4.3},
+  {lat: 59.8977, lng: -151.8272, value: 4.1},
+  {lat: 51.6348, lng: -171.7213, value: 3.6},
+  {lat: 56.1681, lng: -156.0880, value: 3.8}
+ ];
+var gradient = create_color_gradient('blue', 'yellow', 'red');
+var opacity = create_opacity(0.6);
+create_heatmap(map, gradient, opacity, data);
+
   </script>
   <!-- Retrieve incidents -->
   <script  type="text/javascript" charset="UTF-8" >
