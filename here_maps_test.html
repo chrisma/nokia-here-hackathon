@@ -101,7 +101,6 @@ var data = [
  ];
 
 var opacity = create_opacity(0.6);
-create_heatmap(map, opacity, data);
 
   </script>
   <!-- Retrieve incidents -->
@@ -174,6 +173,7 @@ create_heatmap(map, opacity, data);
   }
 
   function analyse() {
+    var map_data = []
     result = {};
     //Group by Lat, Lon
     for(var timestamp in localStorage) {
@@ -194,7 +194,6 @@ create_heatmap(map, opacity, data);
     
     //Calculate score for each long, lat pair
     var amount_measurements = size(localStorage);
-    var map_data = []
     for (var lat_lon in result) {
       amount = result[lat_lon]['congestions'].length;
       score = amount/amount_measurements;
@@ -205,12 +204,14 @@ create_heatmap(map, opacity, data);
         value: score
       });
     }
-
-    console.log(map_data);
+    // console.log(map_data);
+    return map_data
   }
 
   //Store to localStorage every 5 minutes
   setInterval(get_incidents(), 5*60*1000);
+  
+  create_heatmap(map, opacity, analyse());
   </script>
 
 </body>
