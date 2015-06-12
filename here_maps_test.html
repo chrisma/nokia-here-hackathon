@@ -68,55 +68,67 @@ moveMapToX(map);
   </script>
   <!-- Retrieve incidents -->
   <script  type="text/javascript" charset="UTF-8" >
-  function summary(data) {
-    var items = data.TRAFFICITEMS.TRAFFICITEM;
-    var counter = {};
-    $.each(items, function(index, element){
-      var type = element.TRAFFICITEMTYPEDESC;
-      if (counter[type] == undefined) {
-        counter[type] = 1;
-      } else {
-        counter[type] += 1;
-      }
-    });
-    return counter
+
+  function congestion_summary(congestion_obj) {
+    return {
+      criticality: congestion_obj.CRITICALITY,
+      location: congestion_obj.LOCATION,
+      description: congestion_obj.TRAFFICITEMDESCRIPTION,
+      detail: congestion_obj.TRAFFICITEMDETAIL,
+      id: congestion_obj.TRAFFICITEMID
+    }
   }
 
   function filter_by_type(data, type) {
     var items = data.TRAFFICITEMS.TRAFFICITEM;
     return items.filter(function(item){
-      return item.TRAFFICITEMTYPEDESC == type
+      if (item.TRAFFICITEMTYPEDESC) {
+        return item.TRAFFICITEMTYPEDESC == type
+      } else {
+        return false
+      }
     }, items);
+  }
+
+  function retrieve(timestamp) {
+    return JSON.parse(localStorage.getItem(timestamp))
+  }
+
+  function store(data, timestamp) {
+    localStorage.setItem(timestamp, JSON.stringify(data));
   }
 
   function get_incidents() {
     var url = 'http://traffic.cit.api.here.com/traffic/6.0/incidents.json?app_id=YtZv9akmf0nJuS8BmkVE&app_code=Rzpgz5s7hcxkNR-eWgvTAw&prox=52.53052,13.38285,10000&c=en&lg=en&i18n=false&localtime=true&jsoncallback=?'
-    $.getJSON( url, function( data ) {
-      console.log(summary(data));
-      console.log(filter_by_type(data, 'MISCELLANEOUS'));
-      store_incidents(data);
-    });
+      $.getJSON( url, function( data ) {
+        store_incidents(data);
+      });
   }
 
-  function store_incidents(data)
-  {
+  function store_incidents(data) {
       // Check browser support
-      if (typeof(Storage) != "undefined")
-      {
-        // Store
-        var timestamp = $.now();
-        localStorage.setItem(timestamp, JSON.stringify(data));
-        // Retrieve
-        console.log(JSON.parse(localStorage.getItem(timestamp)));
-        document.getElementById("test_storage").innerHTML = localStorage.getItem(timestamp);
+      if (typeof(Storage) != "undefined") {
+        //Store
+        var timestamp = Date.now();
+        var congestion_list = filter_by_type(data, 'CONGESTION');
+        var summaries = congestion_list.map(congestion_summary);
+        store(summaries, timestamp);
     }
-    else
-    {
+    else {
         alert("Sorry, your browser does not support Web Storage...");
     } 
   }
 
-  get_incidents()
+  function localstorage_overview() {
+    for(var timestamp in localStorage) {
+      var item = retrieve(timestamp);
+      var date = new Date( parseInt(timestamp) ).toLocaleString();
+      console.log(date, item);
+    }
+  }
+
+  //Store to localStorage every 5 minutes
+  setInterval(get_incidents(), 5*60*1000);
   </script>
 
 </body>
