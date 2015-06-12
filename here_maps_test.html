@@ -92,19 +92,14 @@ moveMapToX(map);
 
   function store_incidents(data)
   {
-    var items = [];
-      $.each( data, function( key, val ) {
-        items.push( "<li id='" + key + "'>" + val + "</li>" );
-      });
-      var json_string = items.join("");
-
       // Check browser support
       if (typeof(Storage) != "undefined")
       {
         // Store
         var timestamp = $.now();
-        localStorage.setItem(timestamp, json_string);
+        localStorage.setItem(timestamp, JSON.stringify(data));
         // Retrieve
+        console.log(JSON.parse(localStorage.getItem(timestamp)));
         document.getElementById("test_storage").innerHTML = localStorage.getItem(timestamp);
     }
     else
