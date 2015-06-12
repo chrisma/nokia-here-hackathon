@@ -194,12 +194,19 @@ create_heatmap(map, opacity, data);
     
     //Calculate score for each long, lat pair
     var amount_measurements = size(localStorage);
+    var map_data = []
     for (var lat_lon in result) {
       amount = result[lat_lon]['congestions'].length;
-      result[lat_lon]['score'] = amount/amount_measurements;
+      score = amount/amount_measurements;
+      coordinates = JSON.parse(lat_lon);
+      map_data.push({
+        lat: coordinates.LATITUDE,
+        lng: coordinates.LONGITUDE,
+        value: score
+      });
     }
 
-    console.log(result);
+    console.log(map_data);
   }
 
   //Store to localStorage every 5 minutes
