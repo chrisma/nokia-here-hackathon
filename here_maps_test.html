@@ -161,8 +161,45 @@ create_heatmap(map, opacity, data);
     for(var timestamp in localStorage) {
       var item = retrieve(timestamp);
       var date = new Date( parseInt(timestamp) ).toLocaleString();
-      console.log(date, item);
+      console.log(timestamp, date, item);
     }
+  }
+
+  function size(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+  }
+
+  function analyse() {
+    result = {};
+    //Group by Lat, Lon
+    for(var timestamp in localStorage) {
+      var congestions = retrieve(timestamp);
+      var date = new Date( parseInt(timestamp) ).toLocaleString();
+      $.each(congestions, function(index, congestion){
+        //continue
+        if ($.isEmptyObject(congestion)) {return true}
+        var lat_lon = JSON.stringify(congestion.location.GEOLOC.ORIGIN);
+        if (lat_lon in result) {
+          var temp = result[lat_lon];
+          temp['congestions'].push(congestion);
+        } else {
+          result[lat_lon] = {congestions: [congestion]};
+        }
+      });
+    }
+    
+    //Calculate score for each long, lat pair
+    var amount_measurements = size(localStorage);
+    for (var lat_lon in result) {
+      amount = result[lat_lon]['congestions'].length;
+      result[lat_lon]['score'] = amount/amount_measurements;
+    }
+
+    console.log(result);
   }
 
   //Store to localStorage every 5 minutes
