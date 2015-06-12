@@ -28,18 +28,13 @@
  */
 function moveMapToBerlin(map){
   map.setCenter({lat:52.5159, lng:13.3777});
-  map.setZoom(14);
+  map.setZoom(3);
 }
 
 function moveMapToX(map)
 {
     map.setCenter({lat:51.50472, lng:-0.10999});
-    map.setZoom(8);
-}
-
-function create_color_gradient(start, mid, end)
-{
-  return {'0': start, '0.5': mid, '1': end};
+    map.setZoom(3);
 }
 
 function create_opacity(value)
@@ -47,11 +42,10 @@ function create_opacity(value)
   return {'opacity':value};
 }
 
-function create_heatmap(map, gradient, opacity, data)
+function create_heatmap(map, opacity, data)
 {
   // Create heat map provider
   var heatmapProvider = new H.data.heatmap.Provider({
-    colors: new H.data.heatmap.Colors(gradient, true),
     // paint assumed values in regions where no data is available
     assumeValues: true
   });
@@ -95,19 +89,19 @@ var ui = H.ui.UI.createDefault(map, defaultLayers);
 moveMapToX(map);
 
 var data = [
-  {lat: 53.1380, lng: 173.0219, value: 6.1},
-  {lat: 52.0415, lng: -171.8583, value: 5.8},
-  {lat: 53.3657, lng: -169.9851, value: 5.4},
-  {lat: 51.2915, lng: -169.5266, value: 4.6},
-  {lat: 51.5722, lng: -176.4482, value: 4.4},
-  {lat: 51.8108, lng: -171.5867, value: 4.3},
-  {lat: 59.8977, lng: -151.8272, value: 4.1},
-  {lat: 51.6348, lng: -171.7213, value: 3.6},
-  {lat: 56.1681, lng: -156.0880, value: 3.8}
+  {lat: 53.1380, lng: 173.0219, value: 0.2},
+  {lat: 52.0415, lng: -171.8583, value: 0.4},
+  {lat: 53.3657, lng: -169.9851, value: 0.1},
+  {lat: 51.2915, lng: -169.5266, value: 0.3},
+  {lat: 51.5722, lng: -176.4482, value: 0.5},
+  {lat: 51.8108, lng: -171.5867, value: 1.0},
+  {lat: 59.8977, lng: -151.8272, value: 1.0},
+  {lat: 51.6348, lng: -171.7213, value: 1.0},
+  {lat: 56.1681, lng: -156.0880, value: 1.0}
  ];
-var gradient = create_color_gradient('blue', 'yellow', 'red');
+
 var opacity = create_opacity(0.6);
-create_heatmap(map, gradient, opacity, data);
+create_heatmap(map, opacity, data);
 
   </script>
   <!-- Retrieve incidents -->
