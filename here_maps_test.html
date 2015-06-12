@@ -17,7 +17,7 @@
   
 </head>
 <body>
-  <div id="map" style="width: 100%; height: 400px; background: grey"></div>
+  <div id="map" style="position: absolute; top:0; right:0; bottom:0; left:0; background: grey"></div>
   <div id="test_storage" style="width: 50%; height: 100px"></div>
   <script  type="text/javascript" charset="UTF-8" >
     
@@ -47,7 +47,12 @@ function create_heatmap(map, opacity, data)
   // Create heat map provider
   var heatmapProvider = new H.data.heatmap.Provider({
     // paint assumed values in regions where no data is available
-    assumeValues: true
+    assumeValues: true,
+    colors: new H.data.heatmap.Colors({
+      '1.0': '#FF4642',
+      '0.6': '#FF2E29',
+      '0': '#72F372'
+    }, true)
   });
 
   // Add the data
@@ -87,18 +92,6 @@ var ui = H.ui.UI.createDefault(map, defaultLayers);
 
 // Now use the map as required...
 moveMapToBerlin(map);
-
-var data = [
-  {lat: 53.1380, lng: 173.0219, value: 0.2},
-  {lat: 52.0415, lng: -171.8583, value: 0.4},
-  {lat: 53.3657, lng: -169.9851, value: 0.1},
-  {lat: 51.2915, lng: -169.5266, value: 0.3},
-  {lat: 51.5722, lng: -176.4482, value: 0.5},
-  {lat: 51.8108, lng: -171.5867, value: 1.0},
-  {lat: 59.8977, lng: -151.8272, value: 1.0},
-  {lat: 51.6348, lng: -171.7213, value: 1.0},
-  {lat: 56.1681, lng: -156.0880, value: 1.0}
- ];
 
 var opacity = create_opacity(0.6);
 
